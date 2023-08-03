@@ -4,15 +4,8 @@
   color:rgb(224, 64, 168);
   background-color: pink;
   font-family: 'Trebuchet MS';
-  border: 1px solid rgb(224, 64, 168);
+
 }
-
-/* Tämä on kommentti */
-
-p:hover {
-  color:red;
-}
-
 
 .App-logo {
   height: 40vmin;
@@ -26,8 +19,8 @@ p:hover {
 }
 
 .App-header {
-  background-color: rgb(66, 36, 56);
-  min-height: 10vh;
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
