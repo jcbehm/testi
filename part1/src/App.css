@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   color:rgb(224, 64, 168);
   background-color: pink;
   font-family: 'Trebuchet MS';
@@ -13,6 +13,16 @@ p:hover {
   color:red;
 }
 
+button {
+  padding: 10px;
+  margin: 2px;
+  color:red;
+}
+
+#counter {
+  font-size: 24px;
+  color: red;
+}
 
 .App-logo {
   height: 40vmin;
