@@ -1,41 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
 import './App.css';
 
-const Display = ({ counter }) => <p id="counter">{counter}</p>
+import Menu from './components/Menu'
+import Greetings from './components/Greetings'
+import Counter from './components/Counter'
+import NoteList from './components/NoteList'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 
-const Button = ({ handleClick, text }) => (
-  <button onClick={handleClick}>
-    {text}
-  </button>
-  )
-
-const Hello = ({ name, age }) => {
-  const yearNow = new Date().getFullYear()
-  //  console.log("Parametrit: ", name, age)
-  const bornYear = () => yearNow - age
-  return (
-    <div>
-      <br />
-      <p>Hei {name}! Nyt on vuosi {yearNow.toString()} ja sinä olet {age}-vuotias,</p>
-      <p>joten todennäköisesti olet syntynyt vuonna {bornYear()}.</p>
-    </div>
-  )
-}
-
-const History = ({ allClicks}) => {
-  if (allClicks.length === 0) {
-    return ( <p>Klikkaa nappuloita ja katso mitä tapahtuu!</p> )
-  }
-  if (allClicks.length === 1) {
-    return ( <p>Klikkaus: {allClicks.join(' ')}</p> )
-  }
-  return ( <p>{allClicks.length} klikkausta: {allClicks.join(' ')}</p> )
-}
+import noteService from './services/notes'
 
 const App = () => {
+  const [ menu, setMenu ] = useState("menu")
   const [ counter, setCounter ] = useState(0)
   const [ memory, setMemory ] = useState(0)
   const [allClicks, setAll] = useState([])
+  const [important, setImportant] = useState(true)
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
+  const [search, setSearch] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+    }, [])
+    console.log('render', notes.length, 'notes')
+
+  const results = notes.filter(note =>
+    note.content.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const changeMenu = (newMenuState) => () => {
+    if (menu === newMenuState) setMenu("menu")
+    else setMenu(newMenuState)
+  } 
 
   const setToValue = (newValue) => () => {
     if (newValue === 0) {setAll(allClicks.concat('0'))}
@@ -47,33 +50,171 @@ const App = () => {
     setMemory(counter)
     setAll(allClicks.concat('s'))
   }
+  const toggleImportant = () => setImportant(!important)
+
+  const handleNoteChange = (event) => {
+    setNewNote(event.target.value)
+  }
+
+  const addNote = (event) => {
+    event.preventDefault()
+    if (newNote=== "") {
+      setErrorMessage(`
+        No eehän sitä nyt passaa tyhjee lisätä turhan päeten. Kokkeileppa ihan kirjottaa päykäyttää jottainnii.
+      `)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+      /*
+      window.alert(`
+        No eehän sitä nyt passaa tyhjee lisätä turhan päeten. Kokkeileppa ihan kirjottaa päykäyttää jottainnii.
+      `)*/
+      setNewNote('')
+    }
+    else if (notes.find(note => note.content === newNote)) {
+      setErrorMessage(`
+        Vae että "${newNote}"? No semmottiinhan tuolla jo taetaapi olla. Mietippä kuule vielä uuvestaan!
+      `)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+      setNewNote('')
+    }
+    else {
+      const noteObject = {
+      content: newNote,
+      important: true //Math.random() > 0.618
+    }
+    
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
+    }
+  }
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value)
+  }
+
+  const toggleImportanceOf = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+  
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(
+          note => note.id !== id ? note : returnedNote
+        ))
+      })
+      .catch(error => {
+        alert(
+          `Voe tokkiisa! '${note.content}', eehän sitä tuommosta tietoa palavelimelta löyvy alakuunkaa.`
+        )
+        setNotes(notes.filter(n => n.id !== id))
+        console.log(error)
+        
+      })
+  }  
+
+  const eraseNote = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+  
+    noteService
+      .erase(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.filter(
+          note => note.id !== id
+        ))
+      })
+      .catch(error => {
+        alert(
+          `Voe tokkiisa! '${note.content}', sehän näyttääpi että joku ehti ensin.`
+        )
+        setNotes(notes.filter(n => n.id !== id))
+        console.log('Virhe:', error)
+      })
+  }  
 
   const boss = {
     name: 'Morticia',
     age: 89
   }
   console.log('Hauska tutustua, selaimen konsoli. Minä olen React-komponentti.')
-  console.log('rendering...', counter, memory)
+  // console.log('rendering...', counter, memory, newNote)
+
+  if (menu === "menu") {
+    return (
+      <div className="App">
+        <Menu changeMenu={changeMenu}/>
+        <Notification message={errorMessage} />
+      </div>
+    )
+  }
+
+  if (menu === "greetings") {
+    return (
+      <div className="App">
+        <Menu changeMenu={changeMenu}/>
+        <Notification message={errorMessage} />
+        <Greetings boss={boss}/>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (menu === "counter") {
+    return (
+      <div className="App">
+        <Menu changeMenu={changeMenu}/>
+        <Notification message={errorMessage} />
+        <Counter
+          counter={counter}
+          setToValue={setToValue}
+          save={save} memory={memory}
+          allClicks={allClicks}
+        />
+        <Footer />
+      </div>
+    )
+  }
+
+  if (menu === "notes") {
+    return (
+      <div className="App">
+        <Menu changeMenu={changeMenu}/>
+        <Notification message={errorMessage} />
+        <NoteList
+          notes={results}
+          important={important}
+          toggleImportant={toggleImportant}
+          newNote={newNote}
+          handleNoteChange={handleNoteChange}
+          addNote={addNote}
+          search={search}
+          handleSearchChange={handleSearchChange}
+          toggleImportanceOf={toggleImportanceOf}
+          erase={eraseNote}
+        />
+        <Footer />
+      </div>
+    )
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        Terveisiä React-maailmasta!
-      </header>
-      <p>Heipähei, hyvää iltaa.</p>
-      <Hello name="Pulmu-Ulpu" age={3*5-6}/>
-      <Hello name={boss.name} age={boss.age} />
-      <br />
-      <Display counter={counter}/>
-      <Button handleClick={setToValue(counter + 1)} text='ynnää'/>
-      <Button handleClick={setToValue(0)} text='tyhjää'/>
-      <Button handleClick={setToValue(counter - 1)} text='vähennä'/>
-      <Button handleClick={save} text='säilö'/>
-      <Display counter={memory}/>
 
-      <History allClicks={allClicks}/>
+      ???
+      
     </div>
   )
 }
+
+
 
 /*
 import React from 'react'
