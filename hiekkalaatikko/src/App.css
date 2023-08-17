@@ -1,0 +1,133 @@
+.App {
+  text-align: center;
+  font-size: 16px;
+  color:rgb(224, 64, 168);
+  background-color: pink;
+  font-family: 'Trebuchet MS';
+  border: 1px solid rgb(224, 64, 168);
+}
+
+/* Tämä on kommentti */
+
+#menu {
+  background-color: rgb(224, 64, 168);
+}
+
+.notes {
+  text-align: left;
+  color: black;
+  /*     top right bottom left */
+  padding: 0px 0px 10px 10px;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+p:hover {
+  color:red;
+}
+
+button {
+  padding: 10px;
+  margin: 2px;
+  color:red;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 32px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: 20;
+}
+
+.notesButton {
+  padding: 2px;
+  font-size: 12;
+  margin: 0px;
+  color:black;
+}
+
+.note {
+  padding-top: 3px;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.noteButton {
+  padding: 1px;
+  margin: 0px;
+  color:black;
+}
+
+#counter {
+  font-size: 24px;
+  color: red;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: rgb(66, 36, 56);
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+#root {
+  width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  align-self: self-start;
+}
+
+.logo {
+  height: 10em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 30s linear;
+  }
+}
