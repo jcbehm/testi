@@ -1,7 +1,10 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:5172/notes'
+const baseUrl = 'http://localhost:5171/api/notes'
+
+console.log('Terveisiä noteServicestä')
 
 const getAll = () => {
+  console.log('Terveisiä getAllista')
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }

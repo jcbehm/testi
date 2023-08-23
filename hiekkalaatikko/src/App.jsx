@@ -29,6 +29,10 @@ const App = () => {
       .then(initialNotes => {
         setNotes(initialNotes)
       })
+      .catch(error => {
+        console.log('Fail. Error:', error)
+        
+      })
     }, [])
     console.log('render', notes.length, 'notes')
 
@@ -112,9 +116,15 @@ const App = () => {
         ))
       })
       .catch(error => {
-        alert(
+        setErrorMessage(`
+          Voe tokkiisa! '${note.content}', eehän sitä tuommosta tietoa palavelimelta löyvy alakuunkaa.
+        `)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 10000)
+        /*alert(
           `Voe tokkiisa! '${note.content}', eehän sitä tuommosta tietoa palavelimelta löyvy alakuunkaa.`
-        )
+        )*/
         setNotes(notes.filter(n => n.id !== id))
         console.log(error)
         
