@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:5171/api/notes'
+const baseUrl = '/api/notes'
 
 console.log('Terveisiä noteServicestä')
 
