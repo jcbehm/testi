@@ -97,6 +97,16 @@ const App = () => {
         setNotes(notes.concat(returnedNote))
         setNewNote('')
       })
+      .catch(error => {
+        console.log(error.response.data.error)
+        
+        setErrorMessage(`
+        No se tuo palavelin valittaapi tähän tyyliin: "${error.response.data.error}" Että mikä lie ropleema kysseessä...
+      `)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+      })
     }
   }
 

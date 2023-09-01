@@ -12,7 +12,7 @@ const Note = ({ note, toggleImportance, erase, vote }) => {
 
   return (
     <li className='note'>
-      {note.content} &#40;{note.votes} votes&#41;
+      {note.content} <i>&#40;{note.votes} votes&#41;</i>
       <br />
       <button className="noteButton" onClick={toggleImportance}>{label}</button>
       <button className="noteButton" onClick={erase}>delete</button>

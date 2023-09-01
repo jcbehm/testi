@@ -15,7 +15,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 const Note = require('./models/note')
 
 app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
+  response.send('<h1>Hello World!</h1>')
 })
 
 app.get('/info', (request, response) => {
@@ -25,7 +25,7 @@ app.get('/info', (request, response) => {
     response.send('<h2>Notes server</h2>There are ' + amount + ' notes in the server.<br />' + time)
   })
 })
-  
+
 app.get('/api/notes', (request, response) => {
   Note.find({}).then(notes => {
     response.json(notes)
@@ -44,31 +44,31 @@ app.get('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-const generateId = () => {
-    const maxId = notes.length > 0
-      ? Math.max(...notes.map(n => n.id))
-      : 0
-    return maxId + 1
-}
-  
-app.post('/api/notes', (request, response, next) => {
-    const body = request.body
+/*const generateId = () => {
+  const maxId = notes.length > 0
+    ? Math.max(...notes.map(n => n.id))
+    : 0
+  return maxId + 1
+}*/
 
-    const time = new Date().getTime()
-    const note = new Note({
-      content: body.content,
-      important: body.important || false,
-      //id: generateId(),
-      date: time,
-      votes: 0,
+app.post('/api/notes', (request, response, next) => {
+  const body = request.body
+
+  const time = new Date().getTime()
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+    //id: generateId(),
+    date: time,
+    votes: 0,
+  })
+
+  note
+    .save()
+    .then(savedNote => {
+      response.json(savedNote)
     })
-    
-    note
-      .save()
-      .then(savedNote => {
-        response.json(savedNote)
-      })
-      .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/notes/:id', (request, response, next) => {
@@ -95,7 +95,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 })
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
@@ -118,5 +118,5 @@ app.use(errorHandler)
 //const PORT = process.env.PORT || 5171
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })

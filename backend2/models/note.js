@@ -15,15 +15,15 @@ mongoose.connect(url)
   })
 
 const noteSchema = new mongoose.Schema({
-    content: {
-      type: String,
-      minlength: 5,
-      required: true
-    },
-    important: Boolean,
-    date: Number,
-    votes: Number
-  })
+  content: {
+    type: String,
+    minlength: 5,
+    required: true
+  },
+  important: Boolean,
+  date: Number,
+  votes: Number
+})
 
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
