@@ -151,6 +151,33 @@ const App = () => {
       })
   }  
 
+  const voteNote = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, votes: (note.votes + 1) }
+  
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(
+          note => note.id !== id ? note : returnedNote
+        ))
+      })
+      .catch(error => {
+        setErrorMessage(`
+          Voe tokkiisa! '${note.content}', eehän sitä tuommosta tietoa palavelimelta löyvy alakuunkaa.
+        `)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 10000)
+        /*alert(
+          `Voe tokkiisa! '${note.content}', eehän sitä tuommosta tietoa palavelimelta löyvy alakuunkaa.`
+        )*/
+        setNotes(notes.filter(n => n.id !== id))
+        console.log(error)
+        
+      })
+  }  
+
   const boss = {
     name: 'Morticia',
     age: 89
@@ -210,6 +237,7 @@ const App = () => {
           handleSearchChange={handleSearchChange}
           toggleImportanceOf={toggleImportanceOf}
           erase={eraseNote}
+          vote={voteNote}
         />
         <Footer />
       </div>

@@ -6,22 +6,24 @@ const Button = ({ handleClick, text }) => (
 
 const SimpleNote = ({ note }) => <li>{note.content}</li>
 
-const Note = ({ note, toggleImportance, erase }) => {
+const Note = ({ note, toggleImportance, erase, vote }) => {
   const label = note.important
     ? 'make not important' : 'make important'
 
   return (
     <li className='note'>
-      {note.content} &#40;{note.votes}votes&#41;
+      {note.content} &#40;{note.votes} votes&#41;
+      <br />
       <button className="noteButton" onClick={toggleImportance}>{label}</button>
       <button className="noteButton" onClick={erase}>delete</button>
+      <button className="noteButton" onClick={vote}>vote</button>
     </li>
   )
 }
 
 const NoteList = ({
   notes, important, toggleImportant, newNote, handleNoteChange,
-  addNote, search, handleSearchChange, toggleImportanceOf, erase
+  addNote, search, handleSearchChange, toggleImportanceOf, erase, vote
 } ) => {
   const totalVotes = (notes) => notes.reduce((sum, note) => sum + note.votes, 0)
 
@@ -44,6 +46,7 @@ const NoteList = ({
               note={note}
               toggleImportance={() => toggleImportanceOf(note.id)}
               erase={() => erase(note.id)}
+              vote={() => vote(note.id)}
             />
           )}
         </ul>
