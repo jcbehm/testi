@@ -1,7 +1,8 @@
 POST http://localhost:5171/api/notes
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1tZWlrYWVsIiwiaWQiOiI2NTExYTY0NWM0OWJhZGViMWUzMWNmYmMiLCJpYXQiOjE2OTU3NDE5ODksImV4cCI6MTY5NTc0NTU4OX0.gZbrGX3sT8ZYhkM5SExSEneCuaXMPH7Hu6sLUhb7x_E
 
 {
-    "content": "lol",
+    "content": "Hiuli-hei",
     "important": true
 }
